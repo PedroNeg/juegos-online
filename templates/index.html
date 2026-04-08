@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juegos Online</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a14; --surface: #12121f; --card: #1a1a2e; --border: #2a2a4a;
+  --x: #ff4d6d; --o: #4cc9f0; --gold: #ffd166; --green: #06d6a0;
+  --text: #e2e2f0; --dim: #555570;
+  --font-arcade: 'Press Start 2P', monospace; --font-body: 'DM Sans', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+.screen { display: none; width: 100%; max-width: 520px; }
+.screen.active { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.arcade-title { font-family: var(--font-arcade); font-size: clamp(14px, 4vw, 22px); text-align: center; line-height: 1.8; background: linear-gradient(135deg, var(--x), var(--o)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.subtitle { font-family: var(--font-arcade); font-size: 8px; color: var(--dim); letter-spacing: 2px; text-align: center; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; width: 100%; }
+.card h2 { font-family: var(--font-arcade); font-size: 10px; color: var(--dim); letter-spacing: 2px; margin-bottom: 16px; }
+.game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+.game-btn { background: var(--surface); border: 2px solid var(--border); border-radius: 12px; padding: 20px 12px; cursor: pointer; transition: all .2s; text-align: center; color: var(--text); }
+.game-btn.selected { border-color: var(--o); background: #0f2030; }
+.game-btn .icon { font-size: 32px; display: block; margin-bottom: 8px; }
+.game-btn .label { font-family: var(--font-arcade); font-size: 8px; color: var(--dim); }
+input[type=text] { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--font-body); font-size: 15px; padding: 12px 16px; width: 100%; outline: none; transition: border-color .2s; }
+input[type=text]:focus { border-color: var(--o); }
+input[type=text]::placeholder { color: var(--dim); }
+.input-row { display: flex; gap: 8px; width: 100%; }
+.input-row input { flex:1; }
+.btn { font-family: var(--font-arcade); font-size: 9px; padding: 14px 24px; border-radius: 8px; border: none; cursor: pointer; letter-spacing: 1px; transition: all .15s; white-space: nowrap; }
+.btn-primary { background: var(--x); color: white; }
+.btn-secondary { background: var(--o); color: #0a0a14; }
+.btn-ghost { background: var(--border); color: var(--dim); }
+.btn-gold { background: var(--gold); color: #0a0a14; }
+.btn-full { width: 100%; }
+.btn-row { display: flex; gap: 10px; width: 100%; }
+.error-msg { color: var(--x); font-family: var(--font-arcade); font-size: 8px; text-align: center; min-height: 16px; }
+.code-display { font-family: var(--font-arcade); font-size: clamp(28px,8vw,42px); letter-spacing: 12px; color: var(--gold); text-align: center; padding: 16px; background: var(--surface); border-radius: 12px; border: 1px solid #ffd16633; width: 100%; }
+.waiting-hint { font-size: 13px; color: var(--dim); text-align: center; line-height: 1.7; }
+.pulse { animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+.game-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 16px; background: var(--card); border-radius: 12px; border: 1px solid var(--border); }
+.player-tag { display: flex; flex-direction: column; gap: 2px; }
+.player-tag .sym { font-family: var(--font-arcade); font-size: 18px; }
+.player-tag .sym.x { color: var(--x); }
+.player-tag .sym.o { color: var(--o); }
+.player-tag .pname { font-size: 11px; color: var(--dim); }
+.player-tag .pscore { font-family: var(--font-arcade); font-size: 14px; color: var(--text); }
+.vs-sep { font-family: var(--font-arcade); font-size: 9px; color: var(--dim); }
+.status-bar { font-family: var(--font-arcade); font-size: 9px; text-align: center; padding: 10px; border-radius: 8px; background: var(--surface); width: 100%; }
+#tateti-board { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; width: 100%; max-width: 340px; background: var(--border); padding: 6px; border-radius: 12px; }
+.tt-cell { background: var(--card); border-radius: 8px; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-family: var(--font-arcade); font-size: clamp(28px,10vw,48px); cursor: pointer; border: 2px solid transparent; user-select: none; }
+.tt-cell:hover:not(.taken) { background: #1f1f3a; border-color: var(--o); }
+.tt-cell.taken { cursor: default; }
+.tt-cell.x-sym { color: var(--x); }
+.tt-cell.o-sym { color: var(--o); }
+.tt-cell.winner-cell { background: #2a1a00; border-color: var(--gold); }
+#c4-board { background: #0a2060; border-radius: 12px; padding: 10px; width: 100%; max-width: 420px; border: 2px solid #1a3a8a; }
+.c4-col-btns { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin-bottom: 6px; }
+.c4-drop-btn { background: transparent; border: none; cursor: pointer; font-size: 16px; padding: 4px 0; border-radius: 6px; color: var(--o); opacity: 0; transition: opacity .2s; }
+#c4-board:hover .c4-drop-btn { opacity: 1; }
+.c4-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 5px; }
+.c4-cell { aspect-ratio: 1; border-radius: 50%; background: var(--bg); border: 2px solid #0d1a50; transition: background .2s; }
+.c4-cell.x-sym { background: var(--x); }
+.c4-cell.o-sym { background: var(--o); }
+.c4-cell.winner-cell { animation: c4win .4s ease infinite alternate; }
+@keyframes c4win { from{box-shadow:0 0 8px #ffd166} to{box-shadow:0 0 24px #ffd166} }
+.result-overlay { position: fixed; inset: 0; background: #0a0a14cc; display: flex; align-items: center; justify-content: center; z-index: 100; }
+.result-card { background: var(--card); border: 2px solid var(--gold); border-radius: 20px; padding: 40px 32px; text-align: center; max-width: 320px; width: 90%; }
+.result-emoji { font-size: 56px; display: block; margin-bottom: 16px; }
+.result-title { font-family: var(--font-arcade); font-size: 13px; margin-bottom: 24px; line-height: 1.8; }
+.result-title.win { color: var(--gold); }
+.result-title.lose { color: var(--x); }
+.result-title.draw { color: var(--o); }
+</style>
+</head>
+<body>
+<div id="screen-lobby" class="screen active">
+  <div class="arcade-title">JUEGOS<br>ONLINE</div>
+  <div class="subtitle">juga con quien quieras - desde donde sea</div>
+  <div class="card">
+    <h2>elegi un juego</h2>
+    <div class="game-grid">
+      <div class="game-btn selected" data-game="tateti" onclick="selectGame('tateti',this)">
+        <span class="icon">XO</span><span class="label">TATETI</span>
+      </div>
+      <div class="game-btn" data-game="connect4" onclick="selectGame('connect4',this)">
+        <span class="icon">RY</span><span class="label">4 EN LINEA</span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>tu nombre</h2>
+    <input type="text" id="lobby-name" placeholder="Ingresa tu nombre..." maxlength="20">
+  </div>
+  <div class="card">
+    <h2>crear o unirse</h2>
+    <div class="btn-row">
+      <button class="btn btn-primary btn-full" onclick="createRoom()">+ Crear sala</button>
+    </div>
+    <div style="height:12px"></div>
+    <div class="input-row">
+      <input type="text" id="join-code" placeholder="Codigo (ej: ABCD)" maxlength="4" style="text-transform:uppercase;font-family:var(--font-arcade);letter-spacing:4px;font-size:14px">
+      <button class="btn btn-secondary" onclick="joinRoom()">Entrar</button>
+    </div>
+    <div class="error-msg" id="lobby-error"></div>
+  </div>
+</div>
+<div id="screen-waiting" class="screen">
+  <div class="arcade-title">ESPERANDO<br>RIVAL...</div>
+  <div class="card" style="text-align:center;gap:16px;display:flex;flex-direction:column;align-items:center;">
+    <div class="waiting-hint">Comparti este codigo con tu rival:</div>
+    <div class="code-display pulse" id="waiting-code">----</div>
+    <div class="waiting-hint">O mandales el link:<br>
+      <span id="waiting-url" style="color:var(--o);font-size:12px;word-break:break-all;"></span>
+    </div>
+    <button class="btn btn-ghost" onclick="goLobby()">Cancelar</button>
+  </div>
+</div>
+<div id="screen-game" class="screen">
+  <div class="game-header">
+    <div class="player-tag" id="ph-left">
+      <div class="sym x" id="ph-sym-left">X</div>
+      <div class="pname" id="ph-name-left">Jugador 1</div>
+      <div class="pscore" id="ph-score-left">0</div>
+    </div>
+    <div class="vs-sep">VS</div>
+    <div class="player-tag" style="align-items:flex-end" id="ph-right">
+      <div class="sym o" id="ph-sym-right">O</div>
+      <div class="pname" id="ph-name-right">Jugador 2</div>
+      <div class="pscore" id="ph-score-right">0</div>
+    </div>
+  </div>
+  <div class="status-bar" id="status-bar">Conectando...</div>
+  <div id="tateti-board" style="display:none"></div>
+  <div id="c4-board" style="display:none">
+    <div class="c4-col-btns" id="c4-drop-row"></div>
+    <div class="c4-grid" id="c4-grid"></div>
+  </div>
+  <button class="btn btn-ghost" onclick="goLobby()" style="align-self:center;margin-top:4px;">Salir al menu</button>
+</div>
+<script>
+const socket = io();
+let state = { game:"tateti", code:null, symbol:null, myTurn:false, scores:{X:0,O:0}, myName:"", oppName:"", board:null };
+function selectGame(g,el){ state.game=g; document.querySelectorAll(".game-btn").forEach(b=>b.classList.remove("selected")); el.classList.add("selected"); }
+function createRoom(){ const name=document.getElementById("lobby-name").value.trim()||"Jugador 1"; socket.emit("create_room",{game:state.game,name}); }
+function joinRoom(){ const name=document.getElementById("lobby-name").value.trim()||"Jugador 2"; const code=document.getElementById("join-code").value.trim().toUpperCase(); if(!code||code.length!==4){showLobbyError("Ingresa un codigo de 4 letras");return;} socket.emit("join_room_req",{code,name}); }
+function showLobbyError(msg){ const el=document.getElementById("lobby-error"); el.textContent=msg; setTimeout(()=>el.textContent="",3000); }
+function goLobby(){ removeOverlay(); showScreen("lobby"); }
+function showScreen(name){ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active")); document.getElementById("screen-"+name).classList.add("active"); }
+socket.on("room_created",data=>{ state.code=data.code; document.getElementById("waiting-code").textContent=data.code; document.getElementById("waiting-url").textContent=location.origin+"?join="+data.code; showScreen("waiting"); });
+socket.on("error",data=>showLobbyError(data.msg));
+socket.on("game_start",data=>{ state.code=data.code; state.symbol=data.symbol; state.myTurn=data.myTurn; state.myName=data.myName; state.oppName=data.oppName; state.game=data.game; state.board=data.board; state.scores={X:0,O:0}; initGame(); showScreen("game"); });
+socket.on("board_update",data=>{ state.board=data.board; state.myTurn=data.myTurn; renderBoard(); updateStatus(); if(data.result)showResult(data.result); });
+socket.on("rematch_start",data=>{ state.board=data.board; state.myTurn=data.myTurn; removeOverlay(); renderBoard(); updateStatus(); });
+socket.on("opponent_left",()=>{ removeOverlay(); showOverlay(":(","El rival se fue","lose",[{label:"Volver al menu",cls:"btn-ghost",fn:goLobby}]); });
+function initGame(){ const myIsX=state.symbol==="X"; document.getElementById("ph-sym-left").textContent="X"; document.getElementById("ph-sym-right").textContent="O"; document.getElementById("ph-name-left").textContent=myIsX?state.myName:state.oppName; document.getElementById("ph-name-right").textContent=myIsX?state.oppName:state.myName; document.getElementById("ph-score-left").textContent="0"; document.getElementById("ph-score-right").textContent="0"; if(state.game==="tateti"){document.getElementById("tateti-board").style.display="grid";document.getElementById("c4-board").style.display="none";buildTateti();}else{document.getElementById("tateti-board").style.display="none";document.getElementById("c4-board").style.display="block";buildConnect4();} updateStatus(); }
+function buildTateti(){ const board=document.getElementById("tateti-board"); board.innerHTML=""; for(let i=0;i<9;i++){const cell=document.createElement("div");cell.className="tt-cell";cell.id="tt-"+i;cell.onclick=()=>ttClick(i);board.appendChild(cell);} renderBoard(); }
+function ttClick(idx){ if(!state.myTurn||state.board[idx]!=="")return; socket.emit("move",{code:state.code,idx}); }
+function buildConnect4(){ const dropRow=document.getElementById("c4-drop-row"); const grid=document.getElementById("c4-grid"); dropRow.innerHTML=""; grid.innerHTML=""; for(let c=0;c<7;c++){const btn=document.createElement("button");btn.className="c4-drop-btn";btn.textContent="v";btn.onclick=()=>c4Drop(c);dropRow.appendChild(btn);} for(let r=0;r<6;r++){for(let c=0;c<7;c++){const cell=document.createElement("div");cell.className="c4-cell";cell.id="c4-"+r+"-"+c;grid.appendChild(cell);}} renderBoard(); }
+function c4Drop(col){ if(!state.myTurn)return; socket.emit("move",{code:state.code,col}); }
+function renderBoard(){ if(state.game==="tateti"){state.board.forEach((val,i)=>{const cell=document.getElementById("tt-"+i);if(!cell)return;cell.textContent=val;cell.className="tt-cell"+(val?" taken "+val.toLowerCase()+"-sym":"");});}else{for(let r=0;r<6;r++){for(let c=0;c<7;c++){const cell=document.getElementById("c4-"+r+"-"+c);if(!cell)return;const val=state.board[r][c];cell.className="c4-cell"+(val?" "+val.toLowerCase()+"-sym":"");}}} }
+function updateStatus(){ const el=document.getElementById("status-bar"); if(state.myTurn){el.textContent="Tu turno ("+state.symbol+")";el.style.color=state.symbol==="X"?"var(--x)":"var(--o)";}else{el.textContent="Turno del rival...";el.style.color="var(--dim)";} }
+function showResult(result){ if(state.game==="tateti"&&result.combo){result.combo.forEach(i=>{const cell=document.getElementById("tt-"+i);if(cell)cell.classList.add("winner-cell");}); }else if(state.game==="connect4"&&result.cells){result.cells.forEach(([r,c])=>{const cell=document.getElementById("c4-"+r+"-"+c);if(cell)cell.classList.add("winner-cell");});} if(result.winner!=="draw"){state.scores[result.winner]++;document.getElementById("ph-score-left").textContent=state.scores["X"];document.getElementById("ph-score-right").textContent=state.scores["O"];} const iWon=result.winner===state.symbol; const isDraw=result.winner==="draw"; let emoji,title,cls; if(isDraw){emoji=":)";title="EMPATE!";cls="draw";}else if(iWon){emoji=":D";title="GANASTE!";cls="win";}else{emoji=":/";title="GANO EL RIVAL!";cls="lose";} showOverlay(emoji,title,cls,[{label:"Revancha",cls:"btn-gold",fn:requestRematch},{label:"Menu",cls:"btn-ghost",fn:goLobby}]); }
+function requestRematch(){ socket.emit("rematch",{code:state.code}); removeOverlay(); document.getElementById("status-bar").textContent="Esperando revancha..."; }
+function showOverlay(emoji,title,cls,buttons){ removeOverlay(); const ov=document.createElement("div"); ov.className="result-overlay"; ov.id="result-overlay"; const btnsHtml=buttons.map((b,i)=>'<button class="btn '+b.cls+'" style="flex:1" onclick="__ovBtn('+i+')">'+b.label+'</button>').join(""); ov.innerHTML='<div class="result-card"><span class="result-emoji">'+emoji+'</span><div class="result-title '+cls+'">'+title+'</div><div class="btn-row">'+btnsHtml+'</div></div>'; document.body.appendChild(ov); window.__ovButtons=buttons; }
+window.__ovBtn=function(i){window.__ovButtons[i].fn();};
+function removeOverlay(){ const ov=document.getElementById("result-overlay"); if(ov)ov.remove(); }
+window.addEventListener("load",()=>{ const params=new URLSearchParams(location.search); const joinCode=params.get("join"); if(joinCode){document.getElementById("join-code").value=joinCode.toUpperCase();} });
+</script>
+</body>
+</html>
