@@ -22,11 +22,7 @@
   --font-body: 'DM Sans', sans-serif;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   background: var(--bg);
@@ -39,18 +35,8 @@ body {
   padding: 20px;
 }
 
-.screen {
-  display: none;
-  width: 100%;
-  max-width: 520px;
-}
-
-.screen.active {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
+.screen { display: none; width: 100%; max-width: 520px; }
+.screen.active { display: flex; flex-direction: column; align-items: center; gap: 20px; }
 
 .arcade-title {
   font-family: var(--font-arcade);
@@ -63,36 +49,12 @@ body {
   background-clip: text;
 }
 
-.subtitle {
-  font-family: var(--font-arcade);
-  font-size: 8px;
-  color: var(--dim);
-  letter-spacing: 2px;
-  text-align: center;
-}
+.subtitle { font-family: var(--font-arcade); font-size: 8px; color: var(--dim); letter-spacing: 2px; text-align: center; }
 
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  width: 100%;
-}
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; width: 100%; }
+.card h2 { font-family: var(--font-arcade); font-size: 10px; color: var(--dim); letter-spacing: 2px; margin-bottom: 16px; }
 
-.card h2 {
-  font-family: var(--font-arcade);
-  font-size: 10px;
-  color: var(--dim);
-  letter-spacing: 2px;
-  margin-bottom: 16px;
-}
-
-.game-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  width: 100%;
-}
+.game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
 
 .game-btn {
   background: var(--surface);
@@ -104,23 +66,9 @@ body {
   text-align: center;
   color: var(--text);
 }
-
-.game-btn.selected {
-  border-color: var(--o);
-  background: #0f2030;
-}
-
-.game-btn .icon {
-  font-size: 32px;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.game-btn .label {
-  font-family: var(--font-arcade);
-  font-size: 8px;
-  color: var(--dim);
-}
+.game-btn.selected { border-color: var(--o); background: #0f2030; }
+.game-btn .icon { font-size: 32px; display: block; margin-bottom: 8px; }
+.game-btn .label { font-family: var(--font-arcade); font-size: 8px; color: var(--dim); }
 
 input[type=text] {
   background: var(--surface);
@@ -134,24 +82,11 @@ input[type=text] {
   outline: none;
   transition: border-color .2s;
 }
+input[type=text]:focus { border-color: var(--o); }
+input[type=text]::placeholder { color: var(--dim); }
 
-input[type=text]:focus {
-  border-color: var(--o);
-}
-
-input[type=text]::placeholder {
-  color: var(--dim);
-}
-
-.input-row {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-}
-
-.input-row input {
-  flex: 1;
-}
+.input-row { display: flex; gap: 8px; width: 100%; }
+.input-row input { flex: 1; }
 
 .btn {
   font-family: var(--font-arcade);
@@ -164,44 +99,14 @@ input[type=text]::placeholder {
   transition: all .15s;
   white-space: nowrap;
 }
+.btn-primary { background: var(--x); color: white; }
+.btn-secondary { background: var(--o); color: #0a0a14; }
+.btn-ghost { background: var(--border); color: var(--dim); }
+.btn-gold { background: var(--gold); color: #0a0a14; }
+.btn-full { width: 100%; }
+.btn-row { display: flex; gap: 10px; width: 100%; }
 
-.btn-primary {
-  background: var(--x);
-  color: white;
-}
-
-.btn-secondary {
-  background: var(--o);
-  color: #0a0a14;
-}
-
-.btn-ghost {
-  background: var(--border);
-  color: var(--dim);
-}
-
-.btn-gold {
-  background: var(--gold);
-  color: #0a0a14;
-}
-
-.btn-full {
-  width: 100%;
-}
-
-.btn-row {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-}
-
-.error-msg {
-  color: var(--x);
-  font-family: var(--font-arcade);
-  font-size: 8px;
-  text-align: center;
-  min-height: 16px;
-}
+.error-msg { color: var(--x); font-family: var(--font-arcade); font-size: 8px; text-align: center; min-height: 16px; }
 
 .code-display {
   font-family: var(--font-arcade);
@@ -216,21 +121,9 @@ input[type=text]::placeholder {
   width: 100%;
 }
 
-.waiting-hint {
-  font-size: 13px;
-  color: var(--dim);
-  text-align: center;
-  line-height: 1.7;
-}
-
-.pulse {
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0%,100% { opacity: 1; }
-  50% { opacity: .5; }
-}
+.waiting-hint { font-size: 13px; color: var(--dim); text-align: center; line-height: 1.7; }
+.pulse { animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
 
 .game-header {
   display: flex;
@@ -242,37 +135,13 @@ input[type=text]::placeholder {
   border-radius: 12px;
   border: 1px solid var(--border);
 }
-
-.player-tag {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.player-tag .sym {
-  font-family: var(--font-arcade);
-  font-size: 18px;
-}
-
+.player-tag { display: flex; flex-direction: column; gap: 2px; }
+.player-tag .sym { font-family: var(--font-arcade); font-size: 18px; }
 .player-tag .sym.x { color: var(--x); }
 .player-tag .sym.o { color: var(--o); }
-
-.player-tag .pname {
-  font-size: 11px;
-  color: var(--dim);
-}
-
-.player-tag .pscore {
-  font-family: var(--font-arcade);
-  font-size: 14px;
-  color: var(--text);
-}
-
-.vs-sep {
-  font-family: var(--font-arcade);
-  font-size: 9px;
-  color: var(--dim);
-}
+.player-tag .pname { font-size: 11px; color: var(--dim); }
+.player-tag .pscore { font-family: var(--font-arcade); font-size: 14px; color: var(--text); }
+.vs-sep { font-family: var(--font-arcade); font-size: 9px; color: var(--dim); }
 
 .status-bar {
   font-family: var(--font-arcade);
@@ -308,23 +177,11 @@ input[type=text]::placeholder {
   border: 2px solid transparent;
   user-select: none;
 }
-
-.tt-cell:hover:not(.taken) {
-  background: #1f1f3a;
-  border-color: var(--o);
-}
-
-.tt-cell.taken {
-  cursor: default;
-}
-
+.tt-cell:hover:not(.taken) { background: #1f1f3a; border-color: var(--o); }
+.tt-cell.taken { cursor: default; }
 .tt-cell.x-sym { color: var(--x); }
 .tt-cell.o-sym { color: var(--o); }
-
-.tt-cell.winner-cell {
-  background: #2a1a00;
-  border-color: var(--gold);
-}
+.tt-cell.winner-cell { background: #2a1a00; border-color: var(--gold); }
 
 #c4-board {
   background: #0a2060;
@@ -334,14 +191,7 @@ input[type=text]::placeholder {
   max-width: 420px;
   border: 2px solid #1a3a8a;
 }
-
-.c4-col-btns {
-  display: grid;
-  grid-template-columns: repeat(7,1fr);
-  gap: 4px;
-  margin-bottom: 6px;
-}
-
+.c4-col-btns { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin-bottom: 6px; }
 .c4-drop-btn {
   background: transparent;
   border: none;
@@ -353,50 +203,23 @@ input[type=text]::placeholder {
   opacity: 0;
   transition: opacity .2s;
 }
-
-#c4-board:hover .c4-drop-btn {
-  opacity: 1;
-}
-
-.c4-grid {
-  display: grid;
-  grid-template-columns: repeat(7,1fr);
-  gap: 5px;
-}
-
-.c4-cell {
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--bg);
-  border: 2px solid #0d1a50;
-  transition: background .2s;
-}
-
+#c4-board:hover .c4-drop-btn { opacity: 1; }
+.c4-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 5px; }
+.c4-cell { aspect-ratio: 1; border-radius: 50%; background: var(--bg); border: 2px solid #0d1a50; transition: background .2s; }
 .c4-cell.x-sym { background: var(--x); }
 .c4-cell.o-sym { background: var(--o); }
+.c4-cell.winner-cell { animation: c4win .4s ease infinite alternate; }
+@keyframes c4win { from { box-shadow: 0 0 8px #ffd166; } to { box-shadow: 0 0 24px #ffd166; } }
 
-.c4-cell.winner-cell {
-  animation: c4win .4s ease infinite alternate;
-}
-
-@keyframes c4win {
-  from { box-shadow: 0 0 8px #ffd166; }
-  to   { box-shadow: 0 0 24px #ffd166; }
-}
-
-/* PANEL DE RESULTADO CHICO EN ESQUINA */
 .result-overlay {
   position: fixed;
   top: 16px;
   right: 16px;
-  left: auto;
-  bottom: auto;
   background: transparent;
   display: block;
   z-index: 100;
   pointer-events: none;
 }
-
 .result-card {
   background: rgba(26, 26, 46, 0.96);
   border: 2px solid var(--gold);
@@ -407,51 +230,113 @@ input[type=text]::placeholder {
   box-shadow: 0 10px 30px rgba(0,0,0,.35);
   pointer-events: auto;
 }
-
-.result-emoji {
-  font-size: 28px;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.result-title {
-  font-family: var(--font-arcade);
-  font-size: 10px;
-  margin-bottom: 12px;
-  line-height: 1.6;
-}
-
+.result-emoji { font-size: 28px; display: block; margin-bottom: 8px; }
+.result-title { font-family: var(--font-arcade); font-size: 10px; margin-bottom: 12px; line-height: 1.6; }
 .result-title.win { color: var(--gold); }
 .result-title.lose { color: var(--x); }
 .result-title.draw { color: var(--o); }
-
-.result-subtitle {
-  font-size: 12px;
-  color: var(--dim);
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-
-.result-card .btn-row {
-  display: flex;
-  gap: 8px;
-}
-
-.result-card .btn {
-  font-size: 8px;
-  padding: 10px 8px;
-}
+.result-subtitle { font-size: 12px; color: var(--dim); margin-bottom: 10px; line-height: 1.4; }
+.result-card .btn-row { display: flex; gap: 8px; }
+.result-card .btn { font-size: 8px; padding: 10px 8px; }
 
 @media (max-width: 600px) {
-  .result-overlay {
-    top: auto;
-    bottom: 12px;
-    right: 12px;
-  }
+  .result-overlay { top: auto; bottom: 12px; right: 12px; }
+  .result-card { width: min(240px, calc(100vw - 24px)); }
+}
 
-  .result-card {
-    width: min(240px, calc(100vw - 24px));
-  }
+/* ── CHAT ─────────────────────────────────────────── */
+#chat-wrap {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  z-index: 200;
+  display: none;
+  flex-direction: column;
+}
+
+#chat-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px 10px 0 0;
+  color: var(--text);
+  font-family: var(--font-arcade);
+  font-size: 8px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background .2s;
+}
+#chat-toggle:hover { background: #22223a; }
+
+#chat-unread {
+  background: var(--x);
+  color: #fff;
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  display: none;
+}
+
+#chat-body {
+  display: none;
+  flex-direction: column;
+  height: 240px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+}
+
+#chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.chat-line { font-size: 12px; line-height: 1.5; word-break: break-word; font-family: var(--font-body); }
+.chat-line .cname { font-weight: 600; margin-right: 4px; }
+.chat-line.mine .cname { color: var(--x); }
+.chat-line.theirs .cname { color: var(--o); }
+.chat-line.sys { color: var(--dim); font-style: italic; font-size: 11px; }
+
+#chat-input-row {
+  display: flex;
+  border-top: 1px solid var(--border);
+}
+#chat-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 10px 12px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+#chat-input::placeholder { color: var(--dim); }
+#chat-send {
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--border);
+  color: var(--o);
+  cursor: pointer;
+  font-size: 15px;
+  transition: background .15s;
+}
+#chat-send:hover { background: var(--card); }
+
+@media (max-width: 520px) {
+  #chat-wrap { width: calc(100vw - 24px); right: 12px; bottom: 12px; }
 }
 </style>
 </head>
@@ -495,7 +380,7 @@ input[type=text]::placeholder {
 <div id="screen-waiting" class="screen">
   <div class="arcade-title">ESPERANDO<br>RIVAL...</div>
   <div class="card" style="text-align:center;gap:16px;display:flex;flex-direction:column;align-items:center;">
-    <div class="waiting-hint">Comparti este codigo con tu rival:</div>
+    <div class="waiting-hint">Compartí este codigo con tu rival:</div>
     <div class="code-display pulse" id="waiting-code">----</div>
     <div class="waiting-hint">
       O mandales el link:<br>
@@ -532,6 +417,22 @@ input[type=text]::placeholder {
   <button class="btn btn-ghost" onclick="goLobby()" style="align-self:center;margin-top:4px;">Salir al menu</button>
 </div>
 
+<!-- CHAT PANEL -->
+<div id="chat-wrap">
+  <button id="chat-toggle" onclick="toggleChat()">
+    <span>💬 CHAT</span>
+    <span id="chat-unread">0</span>
+  </button>
+  <div id="chat-body">
+    <div id="chat-messages"></div>
+    <div id="chat-input-row">
+      <input id="chat-input" placeholder="Escribi algo..." maxlength="200"
+             onkeydown="if(event.key==='Enter') sendChat()">
+      <button id="chat-send" onclick="sendChat()" title="Enviar">➤</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const socket = io();
 
@@ -546,6 +447,7 @@ let state = {
   board: null
 };
 
+// ── GAME SELECTION ───────────────────────────────────
 function selectGame(g, el) {
   state.game = g;
   document.querySelectorAll(".game-btn").forEach(b => b.classList.remove("selected"));
@@ -560,12 +462,7 @@ function createRoom() {
 function joinRoom() {
   const name = document.getElementById("lobby-name").value.trim() || "Jugador 2";
   const code = document.getElementById("join-code").value.trim().toUpperCase();
-
-  if (!code || code.length !== 4) {
-    showLobbyError("Ingresa un codigo de 4 letras");
-    return;
-  }
-
+  if (!code || code.length !== 4) { showLobbyError("Ingresa un codigo de 4 letras"); return; }
   socket.emit("join_room_req", { code, name });
 }
 
@@ -577,6 +474,7 @@ function showLobbyError(msg) {
 
 function goLobby() {
   removeOverlay();
+  hideChat();
   showScreen("lobby");
 }
 
@@ -585,6 +483,7 @@ function showScreen(name) {
   document.getElementById("screen-" + name).classList.add("active");
 }
 
+// ── SOCKET EVENTS ────────────────────────────────────
 socket.on("room_created", data => {
   state.code = data.code;
   document.getElementById("waiting-code").textContent = data.code;
@@ -605,6 +504,8 @@ socket.on("game_start", data => {
   state.scores = { X: 0, O: 0 };
   initGame();
   showScreen("game");
+  showChatPanel();
+  addSysMsg("🎮 ¡" + data.oppName + " se unio! Que empiece el juego.");
 });
 
 socket.on("board_update", data => {
@@ -625,14 +526,15 @@ socket.on("rematch_start", data => {
 
 socket.on("opponent_left", () => {
   removeOverlay();
+  addSysMsg("👋 El rival se desconecto.");
   showOverlay(":(", "El rival se fue", "lose", [
     { label: "Volver al menu", cls: "btn-ghost", fn: goLobby }
   ]);
 });
 
+// ── GAME LOGIC ───────────────────────────────────────
 function initGame() {
   const myIsX = state.symbol === "X";
-
   document.getElementById("ph-sym-left").textContent = "X";
   document.getElementById("ph-sym-right").textContent = "O";
   document.getElementById("ph-name-left").textContent = myIsX ? state.myName : state.oppName;
@@ -649,14 +551,12 @@ function initGame() {
     document.getElementById("c4-board").style.display = "block";
     buildConnect4();
   }
-
   updateStatus();
 }
 
 function buildTateti() {
   const board = document.getElementById("tateti-board");
   board.innerHTML = "";
-
   for (let i = 0; i < 9; i++) {
     const cell = document.createElement("div");
     cell.className = "tt-cell";
@@ -664,7 +564,6 @@ function buildTateti() {
     cell.onclick = () => ttClick(i);
     board.appendChild(cell);
   }
-
   renderBoard();
 }
 
@@ -676,10 +575,8 @@ function ttClick(idx) {
 function buildConnect4() {
   const dropRow = document.getElementById("c4-drop-row");
   const grid = document.getElementById("c4-grid");
-
   dropRow.innerHTML = "";
   grid.innerHTML = "";
-
   for (let c = 0; c < 7; c++) {
     const btn = document.createElement("button");
     btn.className = "c4-drop-btn";
@@ -687,7 +584,6 @@ function buildConnect4() {
     btn.onclick = () => c4Drop(c);
     dropRow.appendChild(btn);
   }
-
   for (let r = 0; r < 6; r++) {
     for (let c = 0; c < 7; c++) {
       const cell = document.createElement("div");
@@ -696,7 +592,6 @@ function buildConnect4() {
       grid.appendChild(cell);
     }
   }
-
   renderBoard();
 }
 
@@ -727,7 +622,6 @@ function renderBoard() {
 
 function updateStatus() {
   const el = document.getElementById("status-bar");
-
   if (state.myTurn) {
     el.textContent = "Tu turno (" + state.symbol + ")";
     el.style.color = state.symbol === "X" ? "var(--x)" : "var(--o)";
@@ -758,27 +652,13 @@ function showResult(result) {
 
   const iWon = result.winner === state.symbol;
   const isDraw = result.winner === "draw";
-
   let emoji, title, cls;
 
-  if (isDraw) {
-    emoji = ":)";
-    title = "EMPATE!";
-    cls = "draw";
-  } else if (iWon) {
-    emoji = ":D";
-    title = "GANASTE!";
-    cls = "win";
-  } else {
-    emoji = ":/";
-    title = "GANO EL RIVAL!";
-    cls = "lose";
-  }
+  if (isDraw) { emoji = ":)"; title = "EMPATE!"; cls = "draw"; }
+  else if (iWon) { emoji = ":D"; title = "GANASTE!"; cls = "win"; }
+  else { emoji = ":/"; title = "GANO EL RIVAL!"; cls = "lose"; }
 
-  let subtitle = "";
-  if (result.nextStarter) {
-    subtitle = "Proxima ronda arranca: " + result.nextStarter;
-  }
+  let subtitle = result.nextStarter ? "Proxima ronda arranca: " + result.nextStarter : "";
 
   showOverlay(emoji, title, cls, [
     { label: "Revancha", cls: "btn-gold", fn: requestRematch },
@@ -794,15 +674,12 @@ function requestRematch() {
 
 function showOverlay(emoji, title, cls, buttons, subtitle = "") {
   removeOverlay();
-
   const ov = document.createElement("div");
   ov.className = "result-overlay";
   ov.id = "result-overlay";
-
   const btnsHtml = buttons
     .map((b, i) => '<button class="btn ' + b.cls + '" style="flex:1" onclick="__ovBtn(' + i + ')">' + b.label + '</button>')
     .join("");
-
   ov.innerHTML = `
     <div class="result-card">
       <span class="result-emoji">${emoji}</span>
@@ -811,27 +688,90 @@ function showOverlay(emoji, title, cls, buttons, subtitle = "") {
       <div class="btn-row">${btnsHtml}</div>
     </div>
   `;
-
   document.body.appendChild(ov);
   window.__ovButtons = buttons;
 }
 
-window.__ovBtn = function(i) {
-  window.__ovButtons[i].fn();
-};
+window.__ovBtn = function(i) { window.__ovButtons[i].fn(); };
+function removeOverlay() { const ov = document.getElementById("result-overlay"); if (ov) ov.remove(); }
 
-function removeOverlay() {
-  const ov = document.getElementById("result-overlay");
-  if (ov) ov.remove();
+// ── CHAT ─────────────────────────────────────────────
+let chatOpen = false;
+let unread = 0;
+
+function showChatPanel() {
+  const wrap = document.getElementById("chat-wrap");
+  wrap.style.display = "flex";
+  document.getElementById("chat-messages").innerHTML = "";
+  unread = 0;
+  chatOpen = false;
+  document.getElementById("chat-body").style.display = "none";
+  document.getElementById("chat-unread").style.display = "none";
 }
 
+function hideChat() {
+  document.getElementById("chat-wrap").style.display = "none";
+}
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById("chat-body").style.display = chatOpen ? "flex" : "none";
+  if (chatOpen) {
+    unread = 0;
+    document.getElementById("chat-unread").style.display = "none";
+    const msgs = document.getElementById("chat-messages");
+    msgs.scrollTop = msgs.scrollHeight;
+    document.getElementById("chat-input").focus();
+  }
+}
+
+function sendChat() {
+  const input = document.getElementById("chat-input");
+  const text = input.value.trim();
+  if (!text || !state.code) return;
+  socket.emit("chat_msg", { code: state.code, text });
+  input.value = "";
+}
+
+function addChatLine(name, text, mine) {
+  const msgs = document.getElementById("chat-messages");
+  const div = document.createElement("div");
+  div.className = "chat-line " + (mine ? "mine" : "theirs");
+  div.innerHTML = '<span class="cname">' + esc(name) + ':</span>' + esc(text);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  if (!chatOpen) {
+    unread++;
+    const badge = document.getElementById("chat-unread");
+    badge.textContent = unread;
+    badge.style.display = "inline";
+  }
+}
+
+function addSysMsg(text) {
+  const msgs = document.getElementById("chat-messages");
+  const div = document.createElement("div");
+  div.className = "chat-line sys";
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function esc(str) {
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+socket.on("chat_msg", ({ name, text }) => {
+  const mine = name === state.myName;
+  addChatLine(name, text, mine);
+});
+
+// ── URL JOIN PARAM ────────────────────────────────────
 window.addEventListener("load", () => {
   const params = new URLSearchParams(location.search);
   const joinCode = params.get("join");
-  if (joinCode) {
-    document.getElementById("join-code").value = joinCode.toUpperCase();
-  }
+  if (joinCode) document.getElementById("join-code").value = joinCode.toUpperCase();
 });
 </script>
 </body>
-</html>
+  </html>
